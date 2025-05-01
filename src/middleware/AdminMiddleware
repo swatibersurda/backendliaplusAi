@@ -1,35 +1,33 @@
-const ErrorHandler=require("../utils/ErrorHandler")
-const jwt=require("jsonwebtoken")
-const User=require("../model/userModel")
-const dotenv=require("dotenv")
-dotenv.config({path:"./.env"})
-const adminMiddleware=async(req,res,next)=>{
-try{
+const ErrorHandler = require("../utils/ErrorHandler");
+const jwt = require("jsonwebtoken");
+const User = require("../model/userModel");
+const dotenv = require("dotenv");
+dotenv.config({ path: "./.env" });
+const adminMiddleware = async (req, res, next) => {
+  try {
     const bearerToken = req.header("Authorization");
     const token =
       req?.cookies?.accessToken ||
       (bearerToken && bearerToken.startsWith("Bearer ")
         ? bearerToken.split(" ")[1]
         : null);
-    console.log(token,"ytokennnn")
-    if(!token){
-        return next(new ErrorHandler("Unathorized request",401))
-    }
-    const decodedToken=jwt.verify(token,process.env.SECRET_KEY)
-    const user=await User.findById(decodedToken?._id)
-    if(!user){
-        return next(new ErrorHandler("User Not Found",404))
-    }
-    const role=user.role
-    if(role!=="admin"){
-        return next(new ErrorHandler("Only acessiable to admin..forbidden",403))
-    }
-    req.user=user
-    next()
-    
 
-}catch(err){
-    return next(new ErrorHandler("Internal Sddferver Error",500))
-}
-}
-module.exports=adminMiddleware
+    if (!token) {
+      return next(new ErrorHandler("Unathorized request", 401));
+    }
+    const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
+    const user = await User.findById(decodedToken?._id);
+    if (!user) {
+      return next(new ErrorHandler("User Not Found", 404));
+    }
+    const role = user.role;
+    if (role !== "admin") {
+      return next(new ErrorHandler("Only acessiable to admin..forbidden", 403));
+    }
+    req.user = user;
+    next();
+  } catch (err) {
+    return next(new ErrorHandler("Internal Server Error", 500));
+  }
+};
+module.exports = adminMiddleware;

@@ -1,7 +1,6 @@
 const mongoose=require("mongoose")
 const bcryptjs=require("bcryptjs")
 const jwt=require("jsonwebtoken")
-console.log(process.env.s)
 const userSchema=new mongoose.Schema({
 name:{type:String,required:true},
 email:{type:String,required:true},
@@ -19,7 +18,6 @@ userSchema.pre("save",async function(next){
 
 userSchema.methods.validatePassword=async function(password){
     const isMatch=await bcryptjs.compare(password,this.password)
-    console.log(isMatch,"at 21 usershema")
     return isMatch
 }
 userSchema.methods.genrateToken=async function(){
