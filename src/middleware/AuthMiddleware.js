@@ -20,7 +20,7 @@ const authMiddleware = async (req, res, next) => {
       return next(new ErrorHandler("Unauthenticate request", 401));
     }
     const decodeToken = jwt.verify(token, process.env.SECRET_KEY);
-    console.log(decodeToken, "i am");
+    // console.log(decodeToken, "i am");
     const user = await User.findById(decodeToken?._id).select("-password");
 
     if (!user) {

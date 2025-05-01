@@ -2,14 +2,14 @@ const Blog=require("../model/blogModel");
 const ApiResponse = require("../utils/ApiResponse");
 const ErrorHandler=require("../utils/ErrorHandler")
 const addBlog = async (req, res, next) => {
-    console.log("reaching here")
+    // console.log("reaching here")
     try{
 
         const blog=await Blog.create(req.body)
         return res.status(201).json(new ApiResponse("Created Blog",blog,201))
 
     }catch(err){
-        console.log(err)
+        // console.log(err)
         return next(new ErrorHandler("Internal Sdderver Error",500))
     }
 };

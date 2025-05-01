@@ -25,7 +25,7 @@ const register = async (req, res, next) => {
       .status(201)
       .json(new ApiResponse("User Registered Successfully", userTosend, 201));
   } catch (err) {
-    console.log(err)
+    
     return next(new ErrorHandler("Not Registered Successfully", 500));
   }
 };
@@ -60,7 +60,7 @@ const login = async (req, res, next) => {
       const dataToSend = await User.findById({ _id: existingUser?._id }).select(
         "-password"
       );
-      console.log(dataToSend);
+      // console.log(dataToSend);
       return res
         .status(200)
         .cookie("accessToken", token, options)
@@ -80,7 +80,6 @@ const logout = async (req, res, next) => {
     }
     user.accessToken = "";
     await user.save();
-    console.log(user, 79);
     const options = {
       httpOnly: true,
       secure: true,
